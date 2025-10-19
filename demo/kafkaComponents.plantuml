@@ -1,0 +1,118 @@
+@startuml Simple Kafka POC Architecture
+!pragma layout smetana
+
+package "Model" #FFF9C4 {
+  class Message {
+    - String key
+    - String value
+    - long offset
+    - long timestamp
+    + Message(key, value)
+    + getKey(): String
+    + getValue(): String
+    + getOffset(): long
+  }
+  
+  class Offset {
+    - int partition
+    - long offset
+    + Offset(partition, offset)
+    + getPartition(): int
+    + getOffset(): long
+  }
+}
+
+package "Broker" #E3F2FD {
+  class Partition {
+    - int partitionId
+    - List messages
+    - AtomicLong currentOffset
+    + append(Message): long
+    + read(long offset, int maxMessages): List
+    + getCurrentOffset(): long
+  }
+  
+  class Topic {
+    - String name
+    - int numPartitions
+    - List partitions
+    - AtomicInteger roundRobinCounter
+    + Topic(name, numPartitions)
+    + getPartition(String key): Partition
+    + getPartition(int partitionId): Partition
+    + getAllPartitions(): List
+  }
+  
+  class KafkaBroker {
+    - Map topics
+    + createTopic(String name, int partitions): Topic
+    + getTopic(String name): Topic
+    + send(String topic, Message): void
+    + poll(String topic, int partition, long offset, int count): List
+  }
+}
+
+package "Producer" #E3F2FD {
+  class Producer {
+    - KafkaBroker broker
+    + Producer(KafkaBroker)
+    + send(String topic, String key, String value): void
+    + send(String topic, String value): void
+  }
+}
+
+package "Consumer" #E3F2FD {
+  class Consumer {
+    - KafkaBroker broker
+    - String consumerName
+    - Map offsets
+    - volatile boolean running
+    + Consumer(KafkaBroker, name)
+    + subscribe(String topic, int partition): void
+    + poll(String topic, int partition, int maxMessages): List
+    + startPolling(String topic, int partition): void
+    + stop(): void
+  }
+}
+
+package "Demo" {
+  class Main {
+    + main(String[] args): void
+  }
+}
+
+' Relationships
+KafkaBroker "1" *-- "*" Topic : manages
+Topic "1" *-- "*" Partition : contains
+Partition "1" o-- "*" Message : stores
+
+Producer --> KafkaBroker : uses
+Consumer --> KafkaBroker : uses
+
+Producer ..> Message : creates
+Consumer ..> Message : reads
+Consumer ..> Offset : tracks
+
+Main ..> KafkaBroker : creates
+Main ..> Producer : creates
+Main ..> Consumer : creates
+
+note right of Partition
+  Thread-safe using 
+  synchronized methods
+  or concurrent collections
+end note
+
+note right of Topic
+  Partitioning strategy:
+  - Hash-based (with key)
+  - Round-robin (no key)
+end note
+
+note right of Consumer
+  Runs in separate thread,
+  polls periodically for
+  new messages
+end note
+
+@enduml
