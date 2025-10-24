@@ -5,7 +5,9 @@
  * This software is the proprietary information of Present Technologies Lda.
  * Use is subject to license terms.
  */
-package com.example.message;
+package com.example.factory.message;
+
+import com.example.entities.Message;
 
 public interface IMessageFactory {
     Message createMessage(String key, String value, long offset);

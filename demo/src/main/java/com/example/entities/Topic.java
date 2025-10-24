@@ -5,30 +5,39 @@
  * This software is the proprietary information of Present Technologies Lda.
  * Use is subject to license terms.
  */
-package com.example.topic;
+package com.example.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-
-import com.example.partition.Partition;
+import java.util.UUID;
 
 public class Topic {
 
     private final String name;
     private final int totalPartitions;
-    private final List<Partition> partitions;
+    private final Map<UUID, Partition> partitions;
 
-    public Topic(String name, int totalPartitions) {
+    public Topic(String name, int totalPartitions, Map<UUID, Partition> partitions) {
         this.name = name;
         this.totalPartitions = totalPartitions;
-        this.partitions = new ArrayList<>();
+        this.partitions = partitions;
     }
 
-    public String getName() { return name; }
-    public int getTotalPartitions() { return totalPartitions; }
-    public List<Partition> getPartitions() { return partitions; }
-    public void addPartition(Partition partition) { partitions.add(partition); }
+    public String getName() {
+        return name;
+    }
+
+    public int getTotalPartitions() {
+        return totalPartitions;
+    }
+
+    public Map<UUID, Partition> getPartitions() {
+        return partitions;
+    }
+
+    public void addPartition(Partition partition) {
+        partitions.put(partition.getPartitionId(), partition);
+    }
 
     @Override
     public boolean equals(Object obj) {

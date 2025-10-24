@@ -5,9 +5,10 @@
  * This software is the proprietary information of Present Technologies Lda.
  * Use is subject to license terms.
  */
-package com.example.partition;
+package com.example.factory.partition;
 
-import com.example.message.IMessageFactory;
+import com.example.entities.Partition;
+import com.example.factory.message.IMessageFactory;
 
 public class PartitionFactory implements IPartitionFactory {
 

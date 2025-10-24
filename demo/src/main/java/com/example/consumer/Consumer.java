@@ -5,13 +5,14 @@
  * This software is the proprietary information of Present Technologies Lda.
  * Use is subject to license terms.
  */
-package com.example.topic;
+package com.example.consumer;
 
-public class TopicFactory implements ITopicFactory {
+import com.example.entities.Message;
 
-    @Override
-    public Topic createTopic(String name, int totalPartitions) {
-        return new Topic(name, totalPartitions);
+public class Consumer {
+
+
+    public void consume(Message message) {
+
     }
-
 }

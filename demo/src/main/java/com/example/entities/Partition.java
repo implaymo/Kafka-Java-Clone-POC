@@ -1,4 +1,4 @@
-package com.example.partition;
+package com.example.entities;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -6,8 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.message.IMessageFactory;
-import com.example.message.Message;
+import com.example.factory.message.IMessageFactory;
 
 public class Partition {
 
@@ -26,12 +25,15 @@ public class Partition {
     public UUID getPartitionId() {
         return partitionId;
     }
+
     public List<Message> getMessages() {
         return messages;
     }
+
     public AtomicLong getCurrentOffset() {
         return currentOffset;
     }
+
     public IMessageFactory getiMessageFactory() {
         return iMessageFactory;
     }

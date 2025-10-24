@@ -5,26 +5,34 @@
  * This software is the proprietary information of Present Technologies Lda.
  * Use is subject to license terms.
  */
-package com.example.partition;
+package com.example.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.example.message.IMessageFactory;
-import com.example.message.Message;
+import com.example.entities.Partition;
+import com.example.factory.partition.IPartitionFactory;
+import com.example.factory.message.IMessageFactory;
+import com.example.entities.Message;
 
 public class PartitionService {
 
     private IMessageFactory iMessageFactory;
+    private IPartitionFactory iPartitionFactory;
 
-    public PartitionService(IMessageFactory iMessageFactory) {
+    public PartitionService(IMessageFactory iMessageFactory, IPartitionFactory iPartitionFactory) {
         this.iMessageFactory = iMessageFactory;
+        this.iPartitionFactory = iPartitionFactory;
     }
 
-    public synchronized long appendMessages(String key, String value, List<Message> messages, AtomicLong currentOffset) {
+    public Partition createPartition() {
+        return iPartitionFactory.createPartition(iMessageFactory);
+    }
+
+    public synchronized long appendMessages(String key, String value, Partition partition, AtomicLong currentOffset) {
         long offset = currentOffset.getAndIncrement();
-        messages.add(iMessageFactory.createMessage(key, value, offset));
+        partition.getMessages().add(iMessageFactory.createMessage(key, value, offset));
         return offset;
     }
 
