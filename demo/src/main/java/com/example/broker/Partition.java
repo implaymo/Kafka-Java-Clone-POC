@@ -1,12 +1,11 @@
-package com.example;
+package com.example.broker;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.Broker.Message;
-
 public class Partition {
+
     private final int partitionId;
     private final List<Message> messages;
     AtomicLong currentOffset;
@@ -16,6 +15,7 @@ public class Partition {
         this.partitionId = partitionId;
         this.messages = new ArrayList<>();
         this.messageFactory = messageFactory;
+        this.currentOffset = new AtomicLong(0);
     }
 
     public synchronized long append(String key, String value) {
@@ -24,5 +24,19 @@ public class Partition {
         return offset;
     }
 
-    
+    public List<Message> read(AtomicLong offset) {
+        List<Message> messagesToRead = new ArrayList<>();
+        if (offset.get() >= messages.size()) {
+            return messagesToRead;
+        }
+
+        int startIndex = (int) offset.get() + 1;
+        int endIndex = (int) currentOffset.get() - 1;
+
+        for (int i = startIndex; i <= endIndex; i++) {
+            messagesToRead.add(messages.get(i));
+        }
+
+        return messagesToRead;
+    }
 }
