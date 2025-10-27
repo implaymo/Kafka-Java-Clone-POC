@@ -18,8 +18,8 @@ import com.example.entities.Message;
 
 public class PartitionService {
 
-    private IMessageFactory iMessageFactory;
-    private IPartitionFactory iPartitionFactory;
+    private final IMessageFactory iMessageFactory;
+    private final IPartitionFactory iPartitionFactory;
 
     public PartitionService(IMessageFactory iMessageFactory, IPartitionFactory iPartitionFactory) {
         this.iMessageFactory = iMessageFactory;
@@ -27,7 +27,7 @@ public class PartitionService {
     }
 
     public Partition createPartition() {
-        return iPartitionFactory.createPartition(iMessageFactory);
+        return iPartitionFactory.createPartition();
     }
 
     public synchronized long appendMessages(String key, String value, Partition partition, AtomicLong currentOffset) {

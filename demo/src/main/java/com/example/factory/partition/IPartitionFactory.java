@@ -8,8 +8,7 @@
 package com.example.factory.partition;
 
 import com.example.entities.Partition;
-import com.example.factory.message.IMessageFactory;
 
 public interface IPartitionFactory {
-    Partition createPartition(IMessageFactory iMessageFactory);
+    Partition createPartition();
 }

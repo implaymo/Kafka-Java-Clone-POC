@@ -8,18 +8,11 @@
 package com.example.factory.partition;
 
 import com.example.entities.Partition;
-import com.example.factory.message.IMessageFactory;
 
 public class PartitionFactory implements IPartitionFactory {
 
-    private final IMessageFactory iMessageFactory;
-
-    public PartitionFactory(IMessageFactory iMessageFactory) {
-        this.iMessageFactory = iMessageFactory;
-    }
-
     @Override
-    public Partition createPartition(IMessageFactory iMessageFactory) {
-        return new Partition(iMessageFactory);
+    public Partition createPartition() {
+        return new Partition();
     }
 }

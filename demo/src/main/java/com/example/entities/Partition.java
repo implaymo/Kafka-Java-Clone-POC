@@ -6,19 +6,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.factory.message.IMessageFactory;
-
 public class Partition {
 
     private final UUID partitionId;
     private final List<Message> messages;
     AtomicLong currentOffset;
-    private final IMessageFactory iMessageFactory;
 
-    public Partition(IMessageFactory messageFactory) {
+    public Partition() {
         this.partitionId = UUID.randomUUID();
         this.messages = new ArrayList<>();
-        this.iMessageFactory = messageFactory;
         this.currentOffset = new AtomicLong(0);
     }
 
@@ -32,10 +28,6 @@ public class Partition {
 
     public AtomicLong getCurrentOffset() {
         return currentOffset;
-    }
-
-    public IMessageFactory getiMessageFactory() {
-        return iMessageFactory;
     }
 
     @Override
