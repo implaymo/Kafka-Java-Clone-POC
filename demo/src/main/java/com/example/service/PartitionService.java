@@ -38,7 +38,7 @@ public class PartitionService {
 
     public List<Message> readMessages(Partition partition, AtomicLong offset) {
         List<Message> messagesToRead = new ArrayList<>();
-        if (partition.getCurrentOffset().get() >= partition.getMessages().size()) {
+        if (offset.get() >= partition.getMessages().size()) {
             return messagesToRead;
         }
 
